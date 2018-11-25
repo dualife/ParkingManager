@@ -1,0 +1,112 @@
+﻿<Window x:Class="ParkingIHM.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ParkingIHM"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+        mc:Ignorable="d"
+        Title="Parking Manager" Height="450" Width="800"
+        Background="{StaticResource BackgroundColor}"
+        DataContext="{Binding Main, Source={StaticResource Locator}}">
+    <DockPanel>
+
+        <StackPanel Margin="3" DockPanel.Dock="Top" HorizontalAlignment="Center" >
+
+            <WrapPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions >
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Margin="3" Grid.Column="0" Grid.Row="0" Orientation="Horizontal" >
+                        <Label>Nombre de places voiture disponibles</Label>
+                        <TextBox Grid.Row="0" Grid.Column="1" Width="150" IsReadOnly="True"
+                                 Text="{Binding NbCarsAvailable, Mode=OneWay}"/>
+                    </StackPanel>
+
+                    <StackPanel Margin="3" Grid.Column="1" Grid.Row="0" Orientation="Horizontal">
+                        <Label>Nombre de places moto disponibles</Label>
+                        <TextBox Grid.Row="0" Grid.Column="1" Width="150" IsReadOnly="True"
+                                 Text="{Binding NbBikeAvailable, Mode=OneWay}"/>
+                    </StackPanel>
+
+                    <Button Margin="3" Grid.Column="0" Grid.Row="1" Content="Garer une voiture" Command="{Binding ParkACarCmd}"/>
+
+                    <Button Margin="3" Grid.Column="1" Grid.Row="1" Content="Garer une moto" Command="{Binding ParkABikeCmd}"/>
+
+                </Grid>
+            </WrapPanel>
+
+        </StackPanel>
+
+        <Grid Margin="3" DockPanel.Dock="Top">
+            <Grid.ColumnDefinitions>
+                <!--<ColumnDefinition Width="175" />-->
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <!--<StackPanel Grid.Column="0" VerticalAlignment="Top" >
+
+                <GroupBox BorderThickness="2" Margin="2">
+                    <StackPanel  Orientation="Vertical" Margin="3,6,3,3">
+
+                        <Label Margin="0,3,0,0">Sortir un vehicule:</Label>
+
+                        <TextBox Margin="0,3,0,0" Name="VehiculeName" />
+
+                        <Button Margin="0,3,0,0" Content="Quitter le parking" Command="{Binding VehiculeExitCmd}"
+                                CommandParameter="{Binding Text, ElementName=VehiculeName }"/>
+
+                    </StackPanel>
+                </GroupBox>
+
+            </StackPanel>-->
+
+            <telerik:RadBusyIndicator Name="LoadingBI"  Grid.Column="1" BusyContent="Chargement" IsIndeterminate="True"
+                                      IsBusy="{Binding IsBusy}">
+
+                <telerik:RadGridView ItemsSource="{Binding ParkingSpaces}" ShowGroupPanel="True"
+                                     AutoGenerateColumns="False" CanUserDeleteRows="False">
+
+                    <telerik:RadGridView.Columns>
+
+                        <telerik:GridViewDataColumn Header="Numero" IsReadOnly="True"
+											DataMemberBinding="{Binding IdNumber}"/>
+
+                        <telerik:GridViewDataColumn Header="Type" IsReadOnly="True"
+											DataMemberBinding="{Binding Type}"/>
+
+                        <telerik:GridViewDataColumn Header="Disponible" IsReadOnly="True"
+											DataMemberBinding="{Binding IsAvailable}"/>
+
+                        <telerik:GridViewDataColumn Header="Immatriculation" IsReadOnly="True"
+											DataMemberBinding="{Binding Vehicule.Numberplate}" />
+
+                        <telerik:GridViewColumn Header="Action" Width="70">
+                            <telerik:GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <telerik:RadButton Content="Quitter"
+                                                       Command="{Binding Main.LeavingVehicleCmd,
+                                                            Source={StaticResource Locator}}"
+                                                       CommandParameter="{Binding}" />
+                                </DataTemplate>
+                            </telerik:GridViewColumn.CellTemplate>
+                        </telerik:GridViewColumn>
+
+                    </telerik:RadGridView.Columns>
+
+                </telerik:RadGridView>
+
+            </telerik:RadBusyIndicator>
+
+        </Grid>
+
+    </DockPanel>
+
+</Window>
